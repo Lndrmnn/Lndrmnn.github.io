@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Nombre - Analista y Científico de Datos en Salud</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons (Plain JS version) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Usamos la fuente Inter para todo el cuerpo del documento */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        /* Estilos para la barra de navegación activa */
+        .nav-link-active {
+            color: #0ea5e9; /* sky-500 */
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- ========== BARRA DE NAVEGACIÓN ========== -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Reemplaza "Tu Nombre" con tu nombre real -->
+            <a href="#" class="text-2xl font-bold text-slate-900">Tu Nombre</a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#proyectos" class="hover:text-sky-500 transition-colors">Proyectos</a>
+                <a href="#habilidades" class="hover:text-sky-500 transition-colors">Habilidades</a>
+                <a href="#experiencia" class="hover:text-sky-500 transition-colors">Experiencia</a>
+                <a href="#contacto" class="bg-sky-500 text-white px-4 py-2 rounded-lg hover:bg-sky-600 transition-colors">Contacto</a>
+            </div>
+            <!-- Menú para móviles (opcional, pero recomendado) -->
+            <div class="md:hidden">
+                <button class="text-slate-800">
+                    <!-- Icono de menú usando Lucide -->
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-20">
+
+        <!-- ========== SECCIÓN "SOBRE MÍ" (HERO) ========== -->
+        <section id="sobre-mi" class="grid md:grid-cols-5 gap-12 items-center">
+            <div class="md:col-span-3">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">Analista de Datos con Foco en Salud</h1>
+                <!-- Este es tu "Elevator Pitch". Reemplázalo con tu versión final. -->
+                <p class="text-lg text-slate-600 mb-8">
+                    Profesional de la Salud con más de 10 años de experiencia en gestión clínica y administrativa. Actualmente, potencio mi trayectoria con habilidades en Ciencia de Datos, aplicando Python, SQL y Power BI para transformar datos en decisiones estratégicas y generar un impacto medible en los resultados de salud.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#proyectos" class="bg-sky-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-sky-600 transition-transform hover:scale-105">Ver mis Proyectos</a>
+                    <!-- Enlaza tu CV en formato PDF aquí -->
+                    <a href="ruta/a/tu/cv.pdf" class="bg-slate-200 text-slate-800 px-6 py-3 rounded-lg font-semibold hover:bg-slate-300 transition-transform hover:scale-105">Descargar mi CV</a>
+                </div>
+            </div>
+            <div class="md:col-span-2 flex justify-center">
+                <!-- Reemplaza la URL de la imagen con una tuya. Puedes subirla a tu repositorio de GitHub. -->
+                <img src="https://placehold.co/400x400/e2e8f0/334155?text=Tu+Foto" alt="Foto profesional de [Tu Nombre]" class="rounded-full w-64 h-64 md:w-80 md:h-80 object-cover shadow-lg border-4 border-white">
+            </div>
+        </section>
+
+        <!-- ========== SECCIÓN DE PROYECTOS DESTACADOS ========== -->
+        <section id="proyectos" class="py-20 md:py-28">
+            <h2 class="text-3xl font-bold text-center text-slate-900 mb-12">Proyectos Destacados</h2>
+            <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-10">
+
+                <!-- PROYECTO 1: AMBULANCIAS -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-3">Optimización de Operaciones para Flota de Ambulancias</h3>
+                        <p class="text-slate-600 mb-6">
+                            La empresa necesitaba una base objetiva para preparar licitaciones competitivas y crear un plan de mantenimiento predictivo para reducir costos por fallas inesperadas.
+                        </p>
+                        <div class="mb-6">
+                            <span class="font-semibold text-slate-800">Herramientas:</span>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="bg-sky-100 text-sky-800 text-sm font-medium px-3 py-1 rounded-full">Python</span>
+                                <span class="bg-sky-100 text-sky-800 text-sm font-medium px-3 py-1 rounded-full">Pandas</span>
+                                <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">Excel</span>
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full">Power BI</span>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 mb-6"><span class="font-semibold text-slate-800">Impacto:</span> El análisis fue clave para adjudicar dos licitaciones y se estimó una reducción del 15% en detenciones no programadas.</p>
+                        <div class="flex gap-4">
+                             <!-- Reemplaza "#" con los enlaces reales a tu dashboard y código -->
+                            <a href="#" class="bg-slate-800 text-white px-5 py-2 rounded-lg hover:bg-slate-900 transition-colors">Ver Dashboard</a>
+                            <a href="#" class="text-slate-800 border border-slate-300 px-5 py-2 rounded-lg hover:bg-slate-100 transition-colors">Ver Código en GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROYECTO 2: RETAIL -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-3">Análisis de Canasta de Mercado para Supermercado</h3>
+                        <p class="text-slate-600 mb-6">
+                            Análisis de miles de transacciones para identificar patrones de compra y generar un sistema de recomendación de productos basado en reglas de asociación.
+                        </p>
+                        <div class="mb-6">
+                            <span class="font-semibold text-slate-800">Herramientas:</span>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="bg-sky-100 text-sky-800 text-sm font-medium px-3 py-1 rounded-full">Python</span>
+                                <span class="bg-sky-100 text-sky-800 text-sm font-medium px-3 py-1 rounded-full">Apriori</span>
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full">Power BI</span>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 mb-6"><span class="font-semibold text-slate-800">Impacto:</span> Se entregó un cuadro de mando para la toma de decisiones de marketing y una tabla de productos recomendados para mejorar la venta cruzada.</p>
+                        <div class="flex gap-4">
+                            <!-- Reemplaza "#" con los enlaces reales a tu dashboard y código -->
+                            <a href="#" class="bg-slate-800 text-white px-5 py-2 rounded-lg hover:bg-slate-900 transition-colors">Ver Dashboard</a>
+                            <a href="#" class="text-slate-800 border border-slate-300 px-5 py-2 rounded-lg hover:bg-slate-100 transition-colors">Ver Código en GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========== SECCIÓN DE HABILIDADES TÉCNICAS ========== -->
+        <section id="habilidades" class="py-20 md:py-28 bg-white rounded-2xl">
+            <h2 class="text-3xl font-bold text-center text-slate-900 mb-12">Habilidades Técnicas</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                
+                <!-- Columna 1: Lenguajes -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-sky-600">Lenguajes</h3>
+                    <ul class="space-y-2 text-slate-600">
+                        <li>Python</li>
+                        <li>SQL</li>
+                    </ul>
+                </div>
+
+                <!-- Columna 2: Librerías -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-sky-600">Librerías y Frameworks</h3>
+                    <ul class="space-y-2 text-slate-600">
+                        <li>Pandas & NumPy</li>
+                        <li>Matplotlib & Seaborn</li>
+                        <li>Scikit-learn</li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3: Herramientas -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-sky-600">Herramientas y BBDD</h3>
+                    <ul class="space-y-2 text-slate-600">
+                        <li>Power BI</li>
+                        <li>Excel (Avanzado)</li>
+                        <li>Git & GitHub</li>
+                        <li>SQLite</li>
+                    </ul>
+                </div>
+
+                <!-- Columna 4: Competencias de Dominio -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-sky-600">Competencias de Dominio</h3>
+                    <ul class="space-y-2 text-slate-600">
+                        <li>Gestión de Salud Pública</li>
+                        <li>Análisis de KPIs</li>
+                        <li>Optimización de Procesos</li>
+                        <li>Análisis de Costos</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========== SECCIÓN DE EXPERIENCIA ========== -->
+        <section id="experiencia" class="py-20 md:py-28">
+            <h2 class="text-3xl font-bold text-center text-slate-900 mb-12">Experiencia Reenfocada a Datos</h2>
+            <div class="max-w-3xl mx-auto space-y-8 relative">
+                <!-- Línea de tiempo vertical -->
+                <div class="absolute left-3 top-3 h-full w-0.5 bg-slate-200"></div>
+
+                <!-- Experiencia 1 -->
+                <div class="relative pl-12">
+                    <div class="absolute left-0 top-2 w-6 h-6 bg-sky-500 rounded-full border-4 border-white"></div>
+                    <h3 class="text-xl font-bold">Coordinador de Programas de Salud</h3>
+                    <p class="text-slate-500 mb-2">SSMSO | [Año Inicio] - [Año Fin]</p>
+                    <p class="text-slate-600">Gestioné y analicé indicadores de cumplimiento históricos de múltiples centros de salud para negociar y establecer metas alcanzables, optimizando la asignación de fondos para 3 programas clave.</p>
+                </div>
+
+                <!-- Experiencia 2 -->
+                <div class="relative pl-12">
+                    <div class="absolute left-0 top-2 w-6 h-6 bg-sky-500 rounded-full border-4 border-white"></div>
+                    <h3 class="text-xl font-bold">Gestor de Operaciones y Licitaciones</h3>
+                    <p class="text-slate-500 mb-2">Empresa de Ambulancias | [Año Inicio] - [Año Fin]</p>
+                    <p class="text-slate-600">Realicé análisis cuantitativos de costos operativos y de mercado para definir estrategias de precios, lo que resultó en la adjudicación exitosa de licitaciones estratégicas.</p>
+                </div>
+                
+                <!-- Agrega más experiencias aquí si es necesario -->
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========== FOOTER Y CONTACTO ========== -->
+    <footer id="contacto" class="bg-slate-900 text-white">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h2 class="text-3xl font-bold mb-4">Hablemos</h2>
+            <p class="text-slate-300 max-w-2xl mx-auto mb-8">
+                Estoy buscando activamente nuevas oportunidades para aplicar mis habilidades en análisis de datos. Si tienes un proyecto en mente o un rol que crees que encaja con mi perfil, me encantaría conectar.
+            </p>
+            <!-- Reemplaza con tu email -->
+            <a href="mailto:tu.email@ejemplo.com" class="bg-sky-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-sky-600 transition-colors inline-block mb-8">Envíame un correo</a>
+            <div class="flex justify-center space-x-6">
+                <!-- Reemplaza "#" con los enlaces a tus perfiles -->
+                <a href="#" class="text-slate-300 hover:text-white">LinkedIn</a>
+                <a href="#" class="text-slate-300 hover:text-white">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script para inicializar los íconos de Lucide -->
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>
