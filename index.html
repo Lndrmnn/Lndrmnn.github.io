@@ -22,7 +22,16 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; /* slate-50 */
         }
-        /* Estilos para la barra de navegación activa */
+        
+        /* Estilos para el encabezado con imagen de fondo */
+        .site-header {
+            /* URL de la imagen actualizada con la que proporcionaste */
+            background-image: linear-gradient(rgba(20, 30, 48, 0.6), rgba(36, 59, 85, 0.6)), url('https://blog.continua.edu.pe/hs-fs/hubfs/analisis-de-datos-salud-5.jpg?width=1200&name=analisis-de-datos-salud-5.jpg');
+            background-size: cover;
+            background-position: center center;
+        }
+
+        /* Estilos para la barra de navegación activa (opcional, si se necesita) */
         .nav-link-active {
             color: #0ea5e9; /* sky-500 */
         }
@@ -31,19 +40,19 @@
 <body class="text-slate-800">
 
     <!-- ========== BARRA DE NAVEGACIÓN ========== -->
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200">
+    <header class="site-header sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- Nombre actualizado -->
-            <a href="#" class="text-2xl font-bold text-slate-900">José Cifuentes Lindermann</a>
+            <!-- Nombre actualizado con texto blanco para legibilidad -->
+            <a href="#" class="text-2xl font-bold text-white">José Cifuentes Lindermann</a>
             <div class="hidden md:flex space-x-8 items-center">
-                <a href="#proyectos" class="hover:text-sky-500 transition-colors">Proyectos</a>
-                <a href="#habilidades" class="hover:text-sky-500 transition-colors">Habilidades</a>
-                <a href="#experiencia" class="hover:text-sky-500 transition-colors">Experiencia</a>
+                <a href="#proyectos" class="text-white/90 hover:text-white transition-colors">Proyectos</a>
+                <a href="#habilidades" class="text-white/90 hover:text-white transition-colors">Habilidades</a>
+                <a href="#experiencia" class="text-white/90 hover:text-white transition-colors">Experiencia</a>
                 <a href="#contacto" class="bg-sky-500 text-white px-4 py-2 rounded-lg hover:bg-sky-600 transition-colors">Contacto</a>
             </div>
-            <!-- Menú para móviles (opcional, pero recomendado) -->
+            <!-- Menú para móviles con texto blanco -->
             <div class="md:hidden">
-                <button class="text-slate-800">
+                <button class="text-white">
                     <!-- Icono de menú usando Lucide -->
                     <i data-lucide="menu"></i>
                 </button>
