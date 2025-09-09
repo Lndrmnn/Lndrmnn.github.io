@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cifrado de Contraseñas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .bg-gradient-to-br {
+            background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 bg-gray-100">
+    <!-- Main Container -->
+    <div class="w-full max-w-2xl p-8 bg-white rounded-3xl shadow-2xl space-y-8">
+
+        <!-- Access Password Section (Initial View) -->
+        <div id="accessSection" class="section active">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-800">Cifrado de Contraseñas</h1>
+                <p class="mt-2 text-lg text-gray-600">
+                    Inicia sesión para acceder a tus contraseñas.
+                </p>
+                <div id="userIdDisplay" class="text-sm text-gray-400 mt-2">ID de Usuario: Cargando...</div>
+            </div>
+            
+            <div class="space-y-4 mt-6">
+                <button 
+                    id="googleSignInBtn" 
+                    class="w-full py-4 text-white font-bold rounded-full text-lg transition-transform transform hover:scale-105
+                    bg-blue-500 hover:bg-blue-600 shadow-lg hover:shadow-xl flex items-center justify-center"
+                >
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.02 10.151c-2.453 0-4.444 1.99-4.444 4.444s1.99 4.444 4.444 4.444c2.235 0 3.737-.89 4.88-2.001l-1.921-1.722c-.521.488-1.425 1.164-2.959 1.164-1.956 0-3.541-1.585-3.541-3.541s1.585-3.541 3.541-3.541c2.147 0 2.872 1.485 2.924 2.214h-2.924v1.542h4.745c.06-.316.09-.64.09-1.002 0-2.883-2.094-4.996-5.115-4.996z" fill="#4285F4"/><path d="M7.576 13.847c0-1.956 1.585-3.541 3.541-3.541s3.541 1.585 3.541 3.541c0 1.956-1.585 3.541-3.541 3.541s-3.541-1.585-3.541-3.541z" fill="#FFFFFF"/><path d="M17.159 13.064c0 1.465-1.196 2.661-2.661 2.661s-2.661-1.196-2.661-2.661 1.196-2.661 2.661-2.661 2.661 1.196 2.661 2.661z" fill="#FBBC05"/><path d="M22.016 11.238v1.36h-4.745v-1.36h4.745z" fill="#34A853"/><path d="M17.159 13.064c0-1.465-1.196-2.661-2.661-2.661s-2.661 1.196-2.661 2.661 1.196 2.661 2.661 2.661 2.661-1.196 2.661-2.661z" fill="#EA4335"/><path d="M20.25 10.966c.094.521.144 1.05.144 1.624 0 2.883-2.094 4.996-5.115 4.996-2.822 0-5.115-2.284-5.115-5.115s2.293-5.115 5.115-5.115c1.474 0 2.76.623 3.665 1.602l-1.745 1.571c-.521-.488-1.284-1.05-2.261-1.05-1.624 0-2.946 1.322-2.946 2.946s1.322 2.946 2.946 2.946c1.284 0 2.147-.847 2.228-2.008h-2.228v-1.542h4.745c.03.362.06.69.06.945z" fill="#FBBC05"/></svg>
+                    Iniciar sesión con Google
+                </button>
+            </div>
+            <div id="accessMessage" class="hidden mt-4 text-center p-3 rounded-xl bg-red-100 text-red-700 font-medium"></div>
+        </div>
+
+        <!-- Main Menu Section -->
+        <div id="mainSection" class="section">
+            <h1 class="text-4xl font-bold text-gray-800 text-center">Menú Principal</h1>
+            <p class="mt-2 text-lg text-gray-600 text-center">
+                Selecciona una opción para gestionar tus contraseñas.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                <button id="createBtn" class="py-4 text-white font-bold rounded-full text-lg transition-transform transform hover:scale-105 bg-blue-500 hover:bg-blue-600 shadow-lg">
+                    Crear Contraseña
+                </button>
+                <button id="showBtn" class="py-4 text-white font-bold rounded-full text-lg transition-transform transform hover:scale-105 bg-green-500 hover:bg-green-600 shadow-lg">
+                    Mostrar Contraseñas
+                </button>
+                <button id="deleteBtn" class="py-4 text-white font-bold rounded-full text-lg transition-transform transform hover:scale-105 bg-red-500 hover:bg-red-600 shadow-lg">
+                    Eliminar Contraseña
+                </button>
+                <button id="suggestBtn" class="py-4 text-white font-bold rounded-full text-lg transition-transform transform hover:scale-105 bg-purple-500 hover:bg-purple-600 shadow-lg">
+                    Sugerir Contraseña
+                </button>
+            </div>
+            <button id="logoutBtn" class="w-full py-3 mt-8 text-gray-600 font-bold rounded-full text-lg transition-colors hover:bg-gray-200">
+                Cerrar sesión
+            </button>
+        </div>
+
+        <!-- Create Password Section -->
+        <div id="createSection" class="section">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Crear Contraseña</h2>
+            <div class="space-y-6">
+                <input 
+                    type="text" 
+                    id="siteInput" 
+                    class="w-full px-6 py-4 text-xl border-2 border-gray-300 rounded-full focus:border-indigo-500 focus:outline-none"
+                    placeholder="Sitio o propiedad"
+                >
+                <p class="text-gray-500 text-center">Introduce tu propia contraseña o usa el generador abajo.</p>
+                <input 
+                    type="text" 
+                    id="manualPasswordInput" 
+                    class="w-full px-6 py-4 text-xl border-2 border-gray-300 rounded-full focus:border-indigo-500 focus:outline-none"
+                    placeholder="Contraseña manual (opcional)"
+                >
+                <p class="text-gray-500 text-center">- O usa el generador -</p>
+                <input 
+                    type="text" 
+                    id="relatedWordInput" 
+                    class="w-full px-6 py-4 text-xl border-2 border-gray-300 rounded-full focus:border-indigo-500 focus:outline-none"
+                    placeholder="Palabra relacionada (opcional)"
+                >
+                <input 
+                    type="number" 
+                    id="lengthInput" 
+                    class="w-full px-6 py-4 text-xl border-2 border-gray-300 rounded-full focus:border-indigo-500 focus:outline-none"
+                    placeholder="Cantidad de caracteres (min 4)"
+                >
+                <div class="flex items-center space-x-4 flex-wrap">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="specialCharsCheckbox" class="h-5 w-5 rounded text-indigo-600">
+                        <label for="specialCharsCheckbox" class="ml-2 text-gray-700">Incluir caracteres especiales</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="lettersAndNumbersCheckbox" class="h-5 w-5 rounded text-indigo-600">
+                        <label for="lettersAndNumbersCheckbox" class="ml-2 text-gray-700">Solo letras y números</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="onlyNumbersCheckbox" class="h-5 w-5 rounded text-indigo-600">
+                        <label for="onlyNumbersCheckbox" class="ml-2 text-gray-700">Solo números</label>
+                    </div>
+                </div>
+                <button id="saveBtn" class="w-full py-4 text-white font-bold rounded-full text-lg bg-green-500 hover:bg-green-600 transition-transform transform hover:scale-105 shadow-lg">
+                    Guardar Contraseña
+                </button>
+            </div>
+            <div id="createMessage" class="hidden mt-4 text-center p-3 rounded-xl bg-green-100 text-green-700 font-medium"></div>
+            <button id="backToMenuBtn1" class="w-full py-3 mt-6 text-gray-600 font-bold rounded-full text-lg transition-colors hover:bg-gray-200">
+                Volver
+            </button>
+        </div>
+
+        <!-- Show/Delete Passwords Section -->
+        <div id="showSection" class="section">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Contraseñas Guardadas</h2>
+            
+            <!-- New Verification Number Input -->
+            <div class="space-y-4 mb-4">
+                <input
+                    type="number"
+                    id="verificationNumberInput"
+                    class="w-full px-6 py-4 text-xl border-2 border-gray-300 rounded-full transition-colors focus:border-indigo-500 focus:outline-none"
+                    placeholder="Introduce el número de verificación"
+                />
+                <button 
+                    id="viewPasswordsBtn"
+                    class="w-full py-4 text-white font-bold rounded-full text-lg transition-transform transform hover:scale-105 bg-indigo-500 to-purple-600 shadow-lg hover:shadow-xl"
+                >
+                    Ver Contraseñas
+                </button>
+            </div>
+            
+            <div id="passwordListContainer" class="hidden">
+                <div class="space-y-4 mb-4">
+                    <input 
+                        type="text"
+                        id="searchInput"
+                        class="w-full px-6 py-4 text-xl border-2 border-gray-300 rounded-full transition-colors focus:border-indigo-500 focus:outline-none"
+                        placeholder="Buscar por sitio..."
+                    />
+                </div>
+                <div id="passwordList" class="space-y-4">
+                    <!-- Passwords will be injected here by JavaScript -->
+                </div>
+            </div>
+
+            <p id="initialMessage" class='text-center text-gray-500'>Cargando contraseñas...</p>
+            <div id="showMessage" class="hidden mt-4 text-center p-3 rounded-xl bg-red-100 text-red-700 font-medium"></div>
+            <button id="backToMenuBtn2" class="w-full py-3 mt-6 text-gray-600 font-bold rounded-full text-lg transition-colors hover:bg-gray-200">
+                Volver
+            </button>
+        </div>
+
+        <!-- Suggest Password Section -->
+        <div id="suggestSection" class="section">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Sugerir Contraseña</h2>
+            <div class="space-y-6">
+                <input 
+                    type="text" 
+                    id="relatedWordInput2" 
+                    class="w-full px-6 py-4 text-xl border-2 border-gray-300 rounded-full focus:border-indigo-500 focus:outline-none"
+                    placeholder="Palabra relacionada (opcional)"
+                >
+                <input 
+                    type="number" 
+                    id="lengthInput2" 
+                    class="w-full px-6 py-4 text-xl border-2 border-gray-300 rounded-full focus:border-indigo-500 focus:outline-none"
+                    placeholder="Cantidad de caracteres (min 4)"
+                >
+                
+                <div class="flex items-center space-x-4 flex-wrap">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="specialCharsCheckbox2" class="h-5 w-5 rounded text-indigo-600">
+                        <label for="specialCharsCheckbox2" class="ml-2 text-gray-700">Incluir caracteres especiales</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="lettersAndNumbersCheckbox2" class="h-5 w-5 rounded text-indigo-600">
+                        <label for="lettersAndNumbersCheckbox2" class="ml-2 text-gray-700">Solo letras y números</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="onlyNumbersCheckbox2" class="h-5 w-5 rounded text-indigo-600">
+                        <label for="onlyNumbersCheckbox2" class="ml-2 text-gray-700">Solo números</label>
+                    </div>
+                </div>
+
+                <button id="suggestBtn2" class="w-full py-4 text-white font-bold rounded-full text-lg bg-purple-500 hover:bg-purple-600 transition-transform transform hover:scale-105 shadow-lg">
+                    Generar Contraseña
+                </button>
+                <div id="suggestedOutput" class="hidden mt-6 text-center p-4 rounded-xl bg-gray-100 text-gray-700 break-words">
+                    <p class="font-bold">Contraseña Sugerida:</p>
+                    <p id="suggestedPasswordText" class="mt-2 text-xl font-mono"></p>
+                    <button id="saveSuggestedBtn" class="mt-4 w-full py-3 text-white font-bold rounded-full text-lg bg-green-500 hover:bg-green-600 transition-transform transform hover:scale-105 shadow-lg">
+                        Guardar Contraseña Sugerida
+                    </button>
+                </div>
+            </div>
+            <button id="backToMenuBtn3" class="w-full py-3 mt-6 text-gray-600 font-bold rounded-full text-lg transition-colors hover:bg-gray-200">
+                Volver
+            </button>
+        </div>
+
+        <!-- Reusable Message Box -->
+        <div id="messageContainer" class="hidden mt-6 text-center p-4 rounded-xl font-medium"></div>
+
+    </div>
+
+    <!-- Modal to save suggested password -->
+    <div id="saveModal" class="modal-overlay hidden">
+        <div class="modal-content text-center">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Guardar Contraseña</h3>
+            <p class="text-gray-600 mb-4">Por favor, ingresa el nombre del sitio o propiedad.</p>
+            <input 
+                type="text" 
+                id="siteModalInput" 
+                class="w-full px-4 py-2 text-lg border-2 border-gray-300 rounded-full focus:border-indigo-500 focus:outline-none mb-4"
+                placeholder="Nombre del sitio"
+            >
+            <button id="modalSaveBtn" class="w-full py-3 text-white font-bold rounded-full text-lg bg-green-500 hover:bg-green-600 transition-transform transform hover:scale-105 shadow-lg mb-2">
+                Guardar
+            </button>
+            <button id="modalCancelBtn" class="w-full py-3 text-gray-600 font-bold rounded-full text-lg transition-colors hover:bg-gray-200">
+                Cancelar
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getFirestore, 
+            doc, 
+            collection, 
+            onSnapshot, 
+            addDoc, 
+            deleteDoc,
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { 
+            getAuth, 
+            GoogleAuthProvider, 
+            signInWithRedirect, 
+            getRedirectResult,
+            signOut,
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Set Firestore log level for debugging
+        setLogLevel('debug');
+
+        // Firestore Setup
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : '';
+        
+        let app, db, auth, userId;
+        const VERIFICATION_NUMBER_KEY = 7; // El número de verificación secreto
+        let allPasswords = []; // Cache to store all passwords
+        let currentSuggestedPassword = '';
+
+        // --- Core Functions ---
+        
+        // Muestra un mensaje temporal al usuario
+        function showMessage(message, type = "success") {
+            const container = document.getElementById('messageContainer');
+            container.textContent = message;
+            container.className = `mt-6 text-center p-4 rounded-xl font-medium ${type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`;
+            container.classList.remove('hidden');
+            setTimeout(() => {
+                container.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Cambia entre las diferentes secciones de la aplicación
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Genera una contraseña sugerida
+        function generatePassword(relatedWord, length, useSpecial, useLettersAndNumbers, useOnlyNumbers) {
+            const specialChars = "!#$%&/()=?¡¿-_.:;,"; // Updated character set based on user's request
+            const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const numbers = "0123456789";
+            
+            let allChars = "";
+            if (useOnlyNumbers) {
+                allChars = numbers;
+            } else if (useLettersAndNumbers) {
+                allChars = letters + numbers;
+            } else if (useSpecial) {
+                allChars = letters + numbers + specialChars;
+            } else {
+                allChars = letters + numbers + specialChars;
+            }
+            
+            let password = relatedWord.substring(0, length);
+            const remainingLength = length - password.length;
+            
+            for (let i = 0; i < remainingLength; i++) {
+                password += allChars.charAt(Math.floor(Math.random() * allChars.length));
+            }
+            
+            // Mezcla los caracteres para que la palabra relacionada no sea fácilmente un prefijo
+            const shuffledPassword = password.split('').sort(() => 0.5 - Math.random()).join('');
+            return shuffledPassword;
+        }
+
+        // Distorsiona una cadena usando un desplazamiento
+        function distortPassword(password, shift) {
+            let distorted = '';
+            for (let i = 0; i < password.length; i++) {
+                let char = password.charCodeAt(i);
+                
+                // Maneja letras mayúsculas
+                if (char >= 65 && char <= 90) {
+                    char = ((char - 65 + shift) % 26) + 65;
+                }
+                // Maneja letras minúsculas
+                else if (char >= 97 && char <= 122) {
+                    char = ((char - 97 + shift) % 26) + 97;
+                }
+                // Mantiene otros caracteres sin cambios
+                
+                distorted += String.fromCharCode(char);
+            }
+            return distorted;
+        }
+
+        // --- Firestore Functions ---
+
+        // Guarda una nueva entrada de contraseña en Firestore
+        async function saveToFirestore(site, password) {
+            if (!db || !userId) {
+                showMessage("Error: Firebase no inicializado.", "error");
+                return;
+            }
+
+            try {
+                const collectionRef = collection(db, "artifacts", appId, "users", userId, "passwords");
+                
+                await addDoc(collectionRef, {
+                    site: site.toLowerCase(), // Almacena en minúsculas para búsqueda
+                    password: password,
+                    timestamp: serverTimestamp()
+                });
+                
+                showMessage("¡Contraseña guardada exitosamente!");
+            } catch (error) {
+                console.error("Error al guardar en Firestore:", error);
+                showMessage("Error al guardar la contraseña.", "error");
+            }
+        }
+        
+        // Escucha los cambios en tiempo real en la lista de contraseñas
+        function setupPasswordListener() {
+            if (!db || !userId) {
+                console.log("Base de datos no disponible para escuchar cambios.");
+                return;
+            }
+            
+            const collectionRef = collection(db, "artifacts", appId, "users", userId, "passwords");
+            
+            onSnapshot(collectionRef, (snapshot) => {
+                allPasswords = [];
+                snapshot.forEach(doc => allPasswords.push({ id: doc.id, ...doc.data() }));
+                // No renderizar de inmediato, esperar a que el usuario introduzca el número
+            });
+        }
+        
+        // Renderiza la lista de contraseñas basada en el número de verificación
+        function renderPasswordList(verificationNumber) {
+            const passwordList = document.getElementById('passwordList');
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            passwordList.innerHTML = '';
+            
+            if (allPasswords.length === 0) {
+                passwordList.innerHTML = "<p class='text-center text-gray-500'>No hay contraseñas guardadas.</p>";
+                return;
+            }
+
+            const shift = parseInt(verificationNumber, 10) || 0;
+            const isCorrect = shift === VERIFICATION_NUMBER_KEY;
+
+            let foundPasswords = false;
+
+            allPasswords.forEach((data) => {
+                if (searchTerm && !data.site.toLowerCase().includes(searchTerm)) {
+                    return; // Ignora si no coincide con el término de búsqueda
+                }
+                
+                foundPasswords = true;
+
+                let displayedPassword = data.password;
+                if (!isCorrect) {
+                    displayedPassword = distortPassword(data.password, shift);
+                }
+
+                const item = document.createElement('div');
+                item.className = "bg-gray-100 p-4 rounded-xl shadow-inner flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0";
+                item.innerHTML = `
+                    <div class="flex-grow text-left">
+                        <p class="font-bold text-gray-700 text-lg">${data.site}</p>
+                        <p class="text-gray-500 text-sm">Contraseña real: <span class="text-indigo-600 font-semibold break-all" id="real-password-${data.id}">${displayedPassword}</span></p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors transform hover:scale-105" data-id="${data.id}">
+                            Copiar
+                        </button>
+                        <button class="delete-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full transition-colors transform hover:scale-105" data-id="${data.id}">
+                            Eliminar
+                        </button>
+                    </div>
+                `;
+                passwordList.appendChild(item);
+            });
+
+            if (!foundPasswords) {
+                passwordList.innerHTML = "<p class='text-center text-gray-500'>No se encontraron contraseñas que coincidan con la búsqueda.</p>";
+            }
+
+            // Agrega oyentes de eventos para los botones de eliminar y copiar
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const docId = btn.getAttribute('data-id');
+                    await deletePassword(docId);
+                });
+            });
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const docId = btn.getAttribute('data-id');
+                    const passwordData = allPasswords.find(p => p.id === docId);
+                    if (passwordData) {
+                        copyToClipboard(passwordData.password);
+                    }
+                });
+            });
+        }
+
+        // Copia texto al portapapeles
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showMessage("¡Contraseña copiada al portapapeles!");
+        }
+        
+        // Elimina una entrada de contraseña de Firestore
+        async function deletePassword(docId) {
+            if (!db || !userId) {
+                showMessage("Error: Firebase no inicializado.", "error");
+                return;
+            }
+            try {
+                const docRef = doc(db, "artifacts", appId, "users", userId, "passwords", docId);
+                await deleteDoc(docRef);
+                showMessage("Contraseña eliminada exitosamente.");
+            } catch (error) {
+                console.error("Error al eliminar el documento:", error);
+                showMessage("Error al eliminar la contraseña.", "error");
+            }
+        }
+        
+        // --- Event Listeners ---
+
+        // Lógica para iniciar sesión con Google
+        document.getElementById('googleSignInBtn').addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
+            try {
+                await signInWithRedirect(auth, provider);
+            } catch (error) {
+                console.error("Error al iniciar sesión con Google:", error);
+                showMessage("Error al iniciar sesión. Inténtalo de nuevo.", "error");
+            }
+        });
+        
+        // Oyentes de eventos del menú
+        document.getElementById('createBtn').addEventListener('click', () => showSection('createSection'));
+        document.getElementById('showBtn').addEventListener('click', () => showSection('showSection'));
+        document.getElementById('deleteBtn').addEventListener('click', () => showSection('showSection'));
+        document.getElementById('suggestBtn').addEventListener('click', () => showSection('suggestSection'));
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await signOut(auth);
+        });
+        
+        // Botones para volver al menú
+        document.getElementById('backToMenuBtn1').addEventListener('click', () => showSection('mainSection'));
+        document.getElementById('backToMenuBtn2').addEventListener('click', () => showSection('mainSection'));
+        document.getElementById('backToMenuBtn3').addEventListener('click', () => showSection('mainSection'));
+
+        // Lógica para guardar la contraseña
+        document.getElementById('saveBtn').addEventListener('click', async () => {
+            const site = document.getElementById('siteInput').value.trim();
+            const manualPassword = document.getElementById('manualPasswordInput').value;
+            const relatedWord = document.getElementById('relatedWordInput').value.trim();
+            const length = parseInt(document.getElementById('lengthInput').value, 10);
+            
+            const specialCharsCheckbox = document.getElementById('specialCharsCheckbox');
+            const lettersAndNumbersCheckbox = document.getElementById('lettersAndNumbersCheckbox');
+            const onlyNumbersCheckbox = document.getElementById('onlyNumbersCheckbox');
+
+            if (!site) {
+                showMessage("Por favor, ingresa un sitio.", "error");
+                return;
+            }
+
+            let passwordToSave = '';
+
+            // Check if a manual password was entered
+            if (manualPassword) {
+                passwordToSave = manualPassword;
+            } else {
+                // If not, use the generator logic
+                if (isNaN(length) || length < 4) {
+                    showMessage("Por favor, ingresa una longitud válida (mínimo 4) o una contraseña manual.", "error");
+                    return;
+                }
+                passwordToSave = generatePassword(
+                    relatedWord, 
+                    length, 
+                    specialCharsCheckbox.checked, 
+                    lettersAndNumbersCheckbox.checked, 
+                    onlyNumbersCheckbox.checked
+                );
+            }
+
+            await saveToFirestore(site, passwordToSave);
+            document.getElementById('siteInput').value = '';
+            document.getElementById('manualPasswordInput').value = '';
+            document.getElementById('relatedWordInput').value = '';
+            document.getElementById('lengthInput').value = '';
+            
+            specialCharsCheckbox.checked = false;
+            lettersAndNumbersCheckbox.checked = false;
+            onlyNumbersCheckbox.checked = false;
+        });
+
+        // Lógica del botón para ver contraseñas
+        document.getElementById('viewPasswordsBtn').addEventListener('click', () => {
+            const verificationNumber = document.getElementById('verificationNumberInput').value;
+            if (verificationNumber === '') {
+                showMessage("Por favor, ingresa un número de verificación.", "error");
+                return;
+            }
+            document.getElementById('passwordListContainer').classList.remove('hidden');
+            renderPasswordList(verificationNumber);
+        });
+
+        // Lógica del campo de búsqueda
+        document.getElementById('searchInput').addEventListener('input', () => {
+            const verificationNumber = document.getElementById('verificationNumberInput').value;
+            renderPasswordList(verificationNumber);
+        });
+
+        // Lógica para sugerir contraseñas
+        document.getElementById('suggestBtn2').addEventListener('click', () => {
+            const relatedWord = document.getElementById('relatedWordInput2').value.trim();
+            const length = parseInt(document.getElementById('lengthInput2').value, 10);
+            
+            const specialCharsCheckbox = document.getElementById('specialCharsCheckbox2');
+            const lettersAndNumbersCheckbox = document.getElementById('lettersAndNumbersCheckbox2');
+            const onlyNumbersCheckbox = document.getElementById('onlyNumbersCheckbox2');
+
+            if (isNaN(length) || length < 4) {
+                showMessage("Por favor, ingresa una longitud válida (mínimo 4).", "error");
+                return;
+            }
+
+            const suggested = generatePassword(
+                relatedWord, 
+                length, 
+                specialCharsCheckbox.checked, 
+                lettersAndNumbersCheckbox.checked, 
+                onlyNumbersCheckbox.checked
+            );
+            
+            if (suggested) {
+                currentSuggestedPassword = suggested;
+                document.getElementById('suggestedPasswordText').textContent = suggested;
+                document.getElementById('suggestedOutput').classList.remove('hidden');
+            }
+        });
+
+        // Lógica del botón para guardar la contraseña sugerida
+        document.getElementById('saveSuggestedBtn').addEventListener('click', () => {
+            document.getElementById('saveModal').classList.remove('hidden');
+        });
+
+        // Lógica del botón "Guardar" del modal
+        document.getElementById('modalSaveBtn').addEventListener('click', async () => {
+            const siteName = document.getElementById('siteModalInput').value.trim();
+            if (siteName) {
+                await saveToFirestore(siteName, currentSuggestedPassword);
+                document.getElementById('saveModal').classList.add('hidden');
+                document.getElementById('siteModalInput').value = '';
+            } else {
+                showMessage("Por favor, ingresa un nombre de sitio.", "error");
+            }
+        });
+
+        // Lógica del botón "Cancelar" del modal
+        document.getElementById('modalCancelBtn').addEventListener('click', () => {
+            document.getElementById('saveModal').classList.add('hidden');
+            document.getElementById('siteModalInput').value = '';
+        });
+
+
+        // Lógica de las casillas de verificación en la sección "Crear Contraseña"
+        const specialCharsCheckbox = document.getElementById('specialCharsCheckbox');
+        const lettersAndNumbersCheckbox = document.getElementById('lettersAndNumbersCheckbox');
+        const onlyNumbersCheckbox = document.getElementById('onlyNumbersCheckbox');
+
+        specialCharsCheckbox.addEventListener('change', () => {
+            if (specialCharsCheckbox.checked) {
+                lettersAndNumbersCheckbox.checked = false;
+                onlyNumbersCheckbox.checked = false;
+            }
+        });
+        lettersAndNumbersCheckbox.addEventListener('change', () => {
+            if (lettersAndNumbersCheckbox.checked) {
+                specialCharsCheckbox.checked = false;
+                onlyNumbersCheckbox.checked = false;
+            }
+        });
+        onlyNumbersCheckbox.addEventListener('change', () => {
+            if (onlyNumbersCheckbox.checked) {
+                specialCharsCheckbox.checked = false;
+                lettersAndNumbersCheckbox.checked = false;
+            }
+        });
+        
+        // Lógica de las casillas de verificación en la sección "Sugerir Contraseña"
+        const specialCharsCheckbox2 = document.getElementById('specialCharsCheckbox2');
+        const lettersAndNumbersCheckbox2 = document.getElementById('lettersAndNumbersCheckbox2');
+        const onlyNumbersCheckbox2 = document.getElementById('onlyNumbersCheckbox2');
+        
+        specialCharsCheckbox2.addEventListener('change', () => {
+            if (specialCharsCheckbox2.checked) {
+                lettersAndNumbersCheckbox2.checked = false;
+                onlyNumbersCheckbox2.checked = false;
+            }
+        });
+        lettersAndNumbersCheckbox2.addEventListener('change', () => {
+            if (lettersAndNumbersCheckbox2.checked) {
+                specialCharsCheckbox2.checked = false;
+                onlyNumbersCheckbox2.checked = false;
+            }
+        });
+        onlyNumbersCheckbox2.addEventListener('change', () => {
+            if (onlyNumbersCheckbox2.checked) {
+                specialCharsCheckbox2.checked = false;
+                lettersAndNumbersCheckbox2.checked = false;
+            }
+        });
+
+        // --- Inicialización de Firebase ---
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            // Listener para el estado de autenticación.
+            // Esto se ejecuta cada vez que el usuario inicia o cierra sesión.
+            onAuthStateChanged(auth, async (user) => {
+                const userIdDisplay = document.getElementById('userIdDisplay');
+                if (user) {
+                    // Usuario ha iniciado sesión
+                    userId = user.uid;
+                    const displayName = user.displayName || user.email;
+                    userIdDisplay.textContent = `Sesión iniciada como: ${displayName}`;
+                    showSection('mainSection');
+                    setupPasswordListener(); // Sincroniza los datos del usuario logueado
+                } else {
+                    // Usuario ha cerrado sesión o no está logueado
+                    userId = null;
+                    userIdDisplay.textContent = `ID de Usuario: No autenticado`;
+                    showSection('accessSection');
+                }
+            });
+
+        } catch (error) {
+            console.error("Error al inicializar Firebase:", error);
